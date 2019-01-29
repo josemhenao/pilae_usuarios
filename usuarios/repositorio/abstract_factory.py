@@ -1,44 +1,31 @@
-from settings import db_config
-from peewee import MySQLDatabase, PostgresqlDatabase
+from peewee import MySQLDatabase, PostgresqlDatabase, SqliteDatabase
 from abc import ABC, abstractmethod
+from settings import db_config
+
 
 class Abstract_Factory(ABC):
-    def __init__(self, db_config):
-        self.__db_config = db_config
-        self.__database = None
-        super().__init__()
-
+    database = None
 
     @abstractmethod
-    def get_database(self):
-        pass
+    def get_database():
+        '''
+            returns the database created according to the engine defined in the settings file
+            :return: database
+        '''
+        database = None
+        engine = db_config.get('engine')
+        db = db_config.get('database')
 
-    @abstractmethod
-    def __init_database(self):
-        engine = self.__db_config.get('engine')
-        host = self.__db_config.get('host')
-        user = self.__db_config.get('user')
-        password = self.__db_config.get('password')
-        db = self.__db_config.get('database')
+        db_access = {'host' : db_config.get('host'),
+                    'user' : db_config.get('user'),
+                    'password' : db_config.get('password')
+                    }
 
         if engine.lower() == 'mysql':
-            self.__database = MySQLDatabase(host=host,
-                                            user = user,
-                                            password = password,
-                                            database=db
-                                            )
+            database = MySQLDatabase(database=db,**db_access)
         elif engine.lower() == 'postgresql':
-            self.__database = PostgresqlDatabase(host=host,
-                                                 user = user,
-                                                 password = password,
-                                                 database=db
-                                                 )
+            database = PostgresqlDatabase(database=db, **db_access)
         elif engine.lower() == 'sqlite':
-            self.__database = PostgresqlDatabase(host=host,
-                                                 user = user,
-                                                 password = password,
-                                                 database=db
-                                                 )
+            database = SqliteDatabase(database=db, **db_access)
 
-
-
+        return database

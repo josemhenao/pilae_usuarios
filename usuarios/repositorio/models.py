@@ -1,9 +1,11 @@
-from settings import db
 from peewee import *
+
+from usuarios.repositorio.abstract_factory import Abstract_Factory
+
 
 class BaseModel(Model):
     class Meta:
-        database = db
+        database = Abstract_Factory.get_database()
 
 class Recurso(BaseModel):
     id_recurso = AutoField(primary_key=True)
