@@ -1,11 +1,10 @@
 from peewee import *
-
-from usuarios.repositorio.abstract_factory import Abstract_Factory
+from usuarios.repositorio.abstractfactory import AbstractFactory
 
 
 class BaseModel(Model):
     class Meta:
-        database = Abstract_Factory.get_database()
+        database = AbstractFactory.get_database()
 
 class Recurso(BaseModel):
     id_recurso = AutoField(primary_key=True)
@@ -31,3 +30,4 @@ class Usuario(BaseModel):
     identificacion = CharField(max_length=30, null=True)
     imagen = CharField(max_length=255, null=True, default='default.png')
     grupo = ForeignKeyField(Grupo, null = True)
+

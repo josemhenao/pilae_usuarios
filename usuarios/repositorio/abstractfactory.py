@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 from settings import db_config
 
 
-class Abstract_Factory(ABC):
+class AbstractFactory(ABC):
     database = None
 
     @abstractmethod
