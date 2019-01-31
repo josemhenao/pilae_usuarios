@@ -1,5 +1,5 @@
 from peewee import *
-from usuarios.repositorio.abstractfactory import AbstractFactory
+from usuarios.repositorio.abstract_factory import AbstractFactory
 
 
 class BaseModel(Model):
@@ -11,11 +11,11 @@ class Recurso(BaseModel):
     nombre = CharField(max_length=40)
     descripcion = TextField(null = True)
 
-class Grupo(BaseModel):
-    id_grupo = AutoField(primary_key=True)
+class Rol(BaseModel):
+    id_rol = AutoField(primary_key=True)
     nombre = CharField(max_length=40)
     descripcion = TextField(null = True)
-    recursos = ManyToManyField(Recurso, on_delete='cascade')
+    recursos = ManyToManyField(Recurso, backref='grupo')
 
 class Usuario(BaseModel):
     id_usuario = AutoField(primary_key=True)
@@ -29,5 +29,6 @@ class Usuario(BaseModel):
     lugar_nacimiento = CharField(max_length=40)
     identificacion = CharField(max_length=30, null=True)
     imagen = CharField(max_length=255, null=True, default='default.png')
-    grupo = ForeignKeyField(Grupo, null = True)
+    rol = ForeignKeyField(Rol, null = True)
 
+GrupoRecurso = Rol.recursos.get_through_model()
