@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, g
 from usuarios.dominio.usuario_dominio import UsuarioDominio
 from usuarios.controlador.usuario_controlador import UsuarioControlador
 app = Flask(__name__)
@@ -6,7 +6,9 @@ app = Flask(__name__)
 
 @app.route('/')
 @app.route('/home')
-def home_GET():
+def home_GET(*args,**kwargs):
+    print(request.headers.get('Authorization'))
+    print(request.get_json())
     return jsonify({'message':'home!, use a valid url...'})
 
 @app.route('/usuarios', methods=['GET'])
@@ -17,15 +19,20 @@ def usuarios_GET():
 def usuarios_POST():
     data = request.get_json() or {}
     if type(data) is not dict:
-        return jsonify({'message':'Los datos enviados como parámetros no tienen la estructura de JSON'})
+        return jsonify({'message':'Data sent as parameters does not have the JSON structure'})
     elif len(data) == 0:
-        return jsonify({'message': 'No se han enviado datos de usuarios'})
-    elif len(data) == 1:
-        return jsonify(UsuarioDominio.create_usuario(data.get('usuario_1')))
-    elif len(data) > 1:
-        return jsonify(UsuarioDominio.create_usuarios(data))
+        return jsonify({'message': 'No user data has been sent'})
+    # elif len(data) == 1:
+    #     return jsonify(UsuarioDominio.create_usuario(data.get('usuario_1')))
+    # elif len(data) > 1:
+    #     return jsonify(UsuarioDominio.create_usuarios(data))
+    elif len(data) >= 1:
+        for e in data:
+            if UsuarioControlador.is_data_type_validate(data[e]):
+                return jsonify({'message':'Some data types are not correct'})
+        return jsonify(UsuarioDominio.create_usuario(data))
     else:
-        return jsonify({'message':'No se ha podido interpretar la petición'})
+        return jsonify({'message':'The request could not be interpreted'})
 
 @app.route('/usuarios/<int:id_usuario>', methods=['GET'])
 def usuario_GET(id_usuario):
@@ -36,7 +43,7 @@ def usuarios_login():
     rq = request.data
     return 'login'
 
-@app.route('/usuarios/login', methods=['POST'])
+@app.route('/usuarios/logout', methods=['POST'])
 def usuarios_logout():
     return 'logout'
 

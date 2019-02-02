@@ -1,14 +1,16 @@
 from abc import ABC
 from usuarios.repositorio.usuario_factory import UsuarioFactory
+
 class UsuarioDominio(ABC):
 
     @staticmethod
-    def create_usuario(usuario):
+    def create_usuario(data):
+
         return UsuarioFactory.insert_usuario(usuario)
 
-    @staticmethod
-    def crear_usuarios(usuarios):
-        return UsuarioFactory.insert_usuarios(usuarios)
+    # @staticmethod
+    # def crear_usuarios(usuarios):
+    #     return UsuarioFactory.insert_usuarios(usuarios)
 
     @staticmethod
     def read_usuario(id_usuario):
