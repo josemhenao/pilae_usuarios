@@ -5,7 +5,8 @@ class UsuarioDominio(ABC):
 
     @staticmethod
     def create_usuario(data):
-
+        respuesta={}
+        created = UsuarioFactory.insert_usuario(usuario)
         return UsuarioFactory.insert_usuario(usuario)
 
     # @staticmethod

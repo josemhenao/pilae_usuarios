@@ -10,7 +10,7 @@ db_config = {
     'database':'pilae_usuarios'
 }
 
-# Atributos requeridos (no nulos) para que los datos de una peticion POST a usuarios sea correcta
+# Attributes required (not null) so that data in a POST request to users be correct
 REQUIRED_USUARIO = {
     'id_usuario':True,
     'email':True,
@@ -25,3 +25,6 @@ REQUIRED_USUARIO = {
     'imagen':False,
     'rol_id': False
 }
+
+# Define here the number of days a session will be valid
+SESSION_EXPIRATION_DAYS = 15

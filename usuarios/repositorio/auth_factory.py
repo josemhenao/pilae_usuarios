@@ -1,5 +1,6 @@
 from abc import ABC
 from usuarios.repositorio.abstract_factory import AbstractFactory
+from .models import Session
 import secrets
 
 class AuthFactory(ABC):
@@ -8,10 +9,14 @@ class AuthFactory(ABC):
 
     @staticmethod
     def insert_login(*args,**kwargs):
-        # Create login procces
-        return {'message':'login sucessfull',
-                'token':'Token {}'.format(secrets.token_urlsafe())
-                }
+        try:
+            session = Session(**kwargs)
+            session.save()
+        except e:
+            print(e)
+        finally:
+            database.close()
+
 
     @staticmethod
     def remove_login(*args, **kwargs):

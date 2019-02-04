@@ -7,10 +7,12 @@ app = Flask(__name__)
 @app.route('/')
 @app.route('/home')
 def home_GET(*args,**kwargs):
-    print(request.headers.get('Authorization'))
-    print(request.get_json())
+    data = request.get_json()
+    for d in data:
+        print(data.get(d))
     return jsonify({'message':'home!, use a valid url...'})
 
+# Working
 @app.route('/usuarios', methods=['GET'])
 def usuarios_GET():
     return jsonify(UsuarioDominio.read_all_usuarios())
@@ -34,9 +36,16 @@ def usuarios_POST():
     else:
         return jsonify({'message':'The request could not be interpreted'})
 
+# Working
 @app.route('/usuarios/<int:id_usuario>', methods=['GET'])
 def usuario_GET(id_usuario):
     return jsonify(UsuarioDominio.read_usuario(id_usuario))
+
+
+#Working
+@app.route('/usuarios/<int:id_usuario>', methods=['DELETE'])
+def usuario_DELETE(id_usuario):
+    return jsonify(UsuarioDominio.delete_usuario(id_usuario))
 
 @app.route('/usuarios/login', methods=['POST'])
 def usuarios_login():
